@@ -1,5 +1,7 @@
 package core
 
+import "gorm.io/gorm/logger"
+
 func NewServerConfig(mode string, addr string, port int) *ServerConfig {
 	return &ServerConfig{
 		Mode: mode,
@@ -63,4 +65,44 @@ type RedisConfig struct {
 	Username string
 	Password string
 	Db       int
+}
+
+func LoadSqliteConfig(file string) *SqliteConfig {
+	v := NewViperHelper(file)
+	// level := v.GetString("sqlite.level")
+	databaseFile := v.GetString("sqlite.file")
+	return &SqliteConfig{
+		LogLevel: logger.Info,
+		File:     databaseFile,
+	}
+}
+func LoadMySqlConfig(file string) *MySqlConfig {
+	v := NewViperHelper(file)
+	username := v.GetString("mysql.username")
+	password := v.GetString("mysql.password")
+	host := v.GetString("mysql.host")
+	port := v.GetInt("mysql.port")
+	database := v.GetString("mysql.database")
+	return &MySqlConfig{
+		LogLevel: logger.Info,
+		Username: username,
+		Password: password,
+		Host:     host,
+		Port:     port,
+		Database: database,
+	}
+}
+
+type SqliteConfig struct {
+	LogLevel logger.LogLevel
+	File     string
+}
+type MySqlConfig struct {
+	LogLevel logger.LogLevel
+	Username string
+	Password string
+	Host     string
+	Port     int
+	Database string
+	args     map[string]string
 }

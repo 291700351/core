@@ -7,10 +7,71 @@ import (
 	"time"
 
 	"github.com/291700351/core"
+	"github.com/291700351/core/examples/dao"
+	"github.com/291700351/core/examples/model"
 	"github.com/redis/go-redis/v9"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
+	//core.InitMysql(logger.Info, "root", "99233123", "127.0.0.1", 3306, "test", nil)
+	core.InitSqlite()
+	core.GetOrmEngine().AutoMigrate(model.User{})
+	userDao := dao.Use(core.GetOrmEngine()).User
+
+	if u, err := userDao.WithContext(context.Background()).Where(userDao.Name.Like("%Lee%")).Find(); nil == err {
+		for i, u2 := range u {
+			fmt.Printf("index = %d, u = %v\n-------\n", i, u2)
+		}
+	}
+
+}
+
+type User struct {
+	gorm.Model
+	Id   int64
+	Name string
+	Age  int
+}
+
+type UserDao struct {
+	core.Dao[User]
+}
+
+func testGen() {
+	core.InitMysql(logger.Info, "root", "99233123", "127.0.0.1", 3306, "test", nil)
+	core.Gen()
+}
+func testDao() {
+	core.InitMysql(logger.Info, "root", "99233123", "127.0.0.1", 3306, "test", nil)
+	e := core.GetOrmEngine()
+
+	e.AutoMigrate(&User{})
+	dao := UserDao{}
+	dao.DB = e
+
+	// e.Sync(new(User))
+	// dao := core.Dao[User]{
+	// 	Db: e,
+	// }
+
+	user := User{
+		Name: "Lee",
+		Age:  33,
+	}
+
+	dao.Save(&user)
+
+	if ok, u := dao.List(); ok {
+		for _, v := range u {
+			fmt.Println("--->", ":", v.Name)
+		}
+	}
+
+}
+
+func testRedis() {
 	c := core.LoadRedisConfig("./config.yaml")
 
 	helper := core.NewRedisHelper(c)
@@ -49,7 +110,6 @@ func main() {
 	}
 
 	// clusterClient()
-
 }
 
 func c() {
