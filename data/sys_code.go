@@ -7,7 +7,7 @@ type sysCode struct {
 
 	ErrMissParam       *ErrCode
 	ErrNotFount        *ErrCode
-	ErrUnsupportMethod *ErrCode
+	ErrUnSupportMethod *ErrCode
 	ErrInvalidParam    *ErrCode
 
 	//数据库
@@ -29,7 +29,7 @@ var SysCode = sysCode{
 	// 请求相关
 	ErrMissParam:       NewErrCode(200, "缺少必要参数,请检查后重试"),
 	ErrNotFount:        NewErrCode(201, "未找到相关资源,请稍后重试"),
-	ErrUnsupportMethod: NewErrCode(202, "不支持的请求方法,请检查后重试"),
+	ErrUnSupportMethod: NewErrCode(202, "不支持的请求方法,请检查后重试"),
 	ErrInvalidParam:    NewErrCode(203, "请求参数无效,请检查后重试"),
 	// 数据库 CRUD
 	ErrSave:   NewErrCode(300, "保存数据发生错误,请稍后重试"),

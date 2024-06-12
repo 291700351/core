@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+// ErrCode
+// @Description: 响应错误码
 type ErrCode struct {
 	Code  int    `json:"code"`
 	Msg   string `json:"msg"`
@@ -17,7 +19,6 @@ func (e ErrCode) Error() string {
 	} else {
 		return fmt.Sprintf("code: %d, msg: %s", e.Code, e.Msg)
 	}
-
 }
 
 func NewErrCode(code int, msg string) *ErrCode {
@@ -40,6 +41,7 @@ func IsErrCode(err error) bool {
 	return result
 }
 
+// ToErrCode error转 ErrCode
 func ToErrCode(err error) *ErrCode {
 	if !IsErrCode(err) {
 		return nil

@@ -6,6 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
+// OpenDatabase
+//
+//	@Description: 打开一个新的数据库连接
+//	@param dialector 数据库驱动
+//	@param opts 配置
+//	@return *gorm.DB
+//	@return error
 func OpenDatabase(dialector gorm.Dialector, opts ...gorm.Option) (*gorm.DB, error) {
 	db, err := gorm.Open(dialector, opts...)
 	if err != nil {
@@ -13,7 +20,13 @@ func OpenDatabase(dialector gorm.Dialector, opts ...gorm.Option) (*gorm.DB, erro
 	}
 	return db, nil
 }
-// 迁移 schema
+
+// AutoMigrate
+//
+//	@Description: 数据库迁移
+//	@param db
+//	@param autoMigrateTable
+//	@return error
 func AutoMigrate(db *gorm.DB, autoMigrateTable ...interface{}) error {
 	return db.AutoMigrate(autoMigrateTable...)
 }
