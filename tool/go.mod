@@ -1,4 +1,4 @@
-module github.com/291700351/tool
+module github.com/291700351/core/tool
 
 go 1.22.3
 
